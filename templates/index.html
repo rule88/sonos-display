@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="google" content="notranslate">
+        <title>Sonos Display v2.3 </title>
+        <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        	{% if track.image != None %}
+		<div class="wrapper">
+		<div class="card blur">
+        	</div>
+        	<div class="card image">
+        	</div>
+		<!--<p class=text>-->
+		<p>
+		<div class="text" id="marquee">
+		<marquee><span id="track"></span></marquee>
+        	</div>
+		</p>
+        	</div>
+        	{% endif %}
+	
+
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+
+        <script type="text/javascript">
+            var currTrack = '';
+            var playing = true;
+            var version = '';
+            function checkChange() { $.getJSON('/info-light').done(function(data) {
+                    $('#track-title').text(data['title']);
+                    if (currTrack != data['title'])
+                    {
+                        console.log('change found');
+                        loadData();
+                    }
+                });
+            }
+
+            function checkVersion() { $.getJSON('/version').done(function(data) {
+                    $('#track-title').text(data['version']);
+                    if (version != data)
+                    {
+			if (version == ''){
+                        	console.log('init version');
+				version = data;
+			}else{
+	                        console.log('change version found');
+	                        console.log(data+' != '+version);
+				reloadPage();
+			}
+                    }
+                });
+            }
+
+            function loadData() {
+                $.getJSON('/info').done(function(data) {
+                    $('#marquee').html('<marquee><span id="track">'+data['title']+'; '+data['artist']+'; '+data['album']+'</span></marquee>');
+                    $('.card').attr('style','background-image: url("'+data['image']+'");')
+                    currTrack = data['title'];
+                });
+            }
+
+            function reloadPage() {
+                location.reload('true');
+            }
+
+            $(document).ready(function() {
+                loadData();
+                setInterval("checkChange()", 1000);
+                setInterval("checkVersion()", 10000);
+            });
+        </script>
+   </body>
+</html>
