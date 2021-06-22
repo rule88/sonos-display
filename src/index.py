@@ -1,9 +1,9 @@
 import json
 import logging
 import hashlib
+import soco
 
 from flask import Flask, render_template, url_for
-from soco import SoCo
 from settings import settings
 
 werkzeug = logging.getLogger('werkzeug')
@@ -15,41 +15,36 @@ log.setLevel(logging.INFO)
 
 app = Flask(__name__)
 
-app.config.from_pyfile('settings.py')
+display_sonos = soco.discovery.by_name(settings.speaker_name)
 
-sonos = SoCo(settings.speaker_name)
-coordinator = sonos
-
-
-# coordinator = sonos.group.coordinator
 
 @app.route("/play")
 def play():
-    coordinator.play()
+    display_sonos.play()
     return 'Ok'
 
 
 @app.route("/pause")
 def pause():
-    coordinator.pause()
+    display_sonos.pause()
     return 'Ok'
 
 
 @app.route("/next")
 def next():
-    coordinator.next()
+    display_sonos.next()
     return 'Ok'
 
 
 @app.route("/previous")
 def previous():
-    coordinator.previous()
+    display_sonos.previous()
     return 'Ok'
 
 
 @app.route("/info-light")
 def info_light():
-    track = coordinator.get_current_track_info()
+    track = display_sonos.get_current_track_info()
     return json.dumps(track)
 
 
@@ -65,7 +60,7 @@ def version():
 
 @app.route("/info")
 def info():
-    track = coordinator.get_current_track_info()
+    track = display_sonos.get_current_track_info()
     # track['image'] = get_track_image(track['artist'], track['album'])
     track['image'] = track['album_art']
     if track['image'] == "":
@@ -76,7 +71,7 @@ def info():
 
 @app.route("/")
 def index():
-    track = coordinator.get_current_track_info()
+    track = display_sonos.get_current_track_info()
     # track['image'] = get_track_image(track['artist'], track['album'])
     track['image'] = track['album_art']
     if track['image'] == "":
