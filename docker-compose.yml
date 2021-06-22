@@ -4,3 +4,5 @@ services:
     build: .
     ports:
       - "${PORT}:5000"
+    environment:
+      - SPEAKER_NAME=${SPEAKER_NAME}

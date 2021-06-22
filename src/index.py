@@ -52,9 +52,9 @@ def info_light():
 @app.route("/version")
 def version():
     filehash_html = hashlib.md5()
-    filehash_html.update(open('templates/index.html').read())
+    filehash_html.update(open('templates/index.html', "r", encoding='utf-8').read().encode('utf-8'))
     filehash_css = hashlib.md5()
-    filehash_css.update(open('static/css/main.css').read())
+    filehash_css.update(open('static/css/main.css', "r", encoding='utf-8').read().encode('utf-8'))
     version = filehash_html.hexdigest() + filehash_css.hexdigest()
     return json.dumps(version)
 
