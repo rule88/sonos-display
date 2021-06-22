@@ -17,6 +17,7 @@ app = Flask(__name__)
 
 display_sonos = soco.discovery.by_name(settings.speaker_name)
 
+log.info(f'sonos used for peering: {display_sonos.get_speaker_info()}')
 
 @app.route("/play")
 def play():
