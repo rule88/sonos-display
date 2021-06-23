@@ -2,7 +2,8 @@ version: '3'
 services:
   sonos-display:
     build: .
-    ports:
-      - "${PORT}:5000"
+    restart: unless-stopped
+    network_mode: "host"
     environment:
-      - SPEAKER_NAME=${SPEAKER_NAME}
+      - PORT="${PORT}"
+      - SPEAKER_NAME="${SPEAKER_NAME}"
