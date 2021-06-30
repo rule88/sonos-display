@@ -1,7 +1,7 @@
 version: '3'
 services:
   sonos-display:
-    build: .
+    image: rule88/sonos-display
     restart: unless-stopped
     network_mode: "host"
     environment:
