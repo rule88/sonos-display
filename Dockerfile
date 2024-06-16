@@ -1,19 +1,13 @@
-FROM python:3.12-slim-bookworm
+ARG PYTHON_VERSION=3.11
+FROM python:${PYTHON_VERSION}-alpine
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends curl
-RUN apt-get clean
-
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python
-RUN cd /usr/local/bin
-RUN ln -s /opt/poetry/bin/poetry
-RUN poetry config virtualenvs.create false
+RUN apk add libxml2-dev libxslt-dev cargo
 
 WORKDIR /app
-COPY ./pyproject.toml ./poetry.lock* ./
+COPY ./requirements.txt /tmp/
 COPY ./app ./
 
-RUN poetry install --no-root --no-dev --no-interaction
+RUN pip install -r /tmp/requirements.txt
 
 ENV TZ=Europe/Amsterdam
 ENV PYTHONUNBUFFERED=1
