@@ -4,10 +4,10 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends curl
 RUN apt-get clean
 
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python
+RUN cd /usr/local/bin
+RUN ln -s /opt/poetry/bin/poetry
+RUN poetry config virtualenvs.create false
 
 WORKDIR /app
 COPY ./pyproject.toml ./poetry.lock* ./
