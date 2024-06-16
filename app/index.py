@@ -19,10 +19,10 @@ app = Flask('sonos-display')
 
 @cachetools.func.ttl_cache(ttl=60)
 def get_sonos():
-    sonos = soco.discovery.by_name(settings.speaker_name)
-    if not sonos:
-        raise soco.SoCoException(f'couldn\'t find sonos by provided name "{settings.speaker_name}"')
-    return sonos
+    for speaker in soco.discovery.scan_network():
+        if speaker.get_speaker_info()['zone_name'] == settings.speaker_name:
+            return speaker
+    raise soco.SoCoException(f'couldn\'t find sonos by provided name "{settings.speaker_name}"')
 
 
 @app.route("/play")
