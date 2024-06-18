@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 FROM python:${PYTHON_VERSION}-alpine
 
-RUN apk add libxslt
+RUN apk add libxslt-dev
 
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
