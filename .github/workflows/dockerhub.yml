@@ -21,4 +21,4 @@ jobs:
         run: |
           docker buildx build --push \
             --tag rule88/sonos-display:latest \
-            --platform linux/amd64,linux/arm64,linux/arm/v7 .
+            --platform linux/amd64,linux/arm/v7 .
